@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 
 import play.db.ebean.Model;
 
@@ -20,6 +21,12 @@ public class Account extends Model {
 	 */
 	@ManyToMany
 	public List<ServiceContract> serviceContracts;
+
+	@ManyToMany
+	public List<Contact> contacts;
+	
+	@OneToOne
+	public Contact primaryContact;
 	
 	
 	
@@ -29,9 +36,10 @@ public class Account extends Model {
 	 * Static factory method
 	 * @return
 	 */
-	public static Account createNewAccount() {
+	public static Account create() {
 		Account account = new Account();
 		account.serviceContracts = new ArrayList<>();
+		account.contacts = new ArrayList<>();
 		return account;
 	}
 	
@@ -41,6 +49,23 @@ public class Account extends Model {
 	 */
 	public void addServiceContract(ServiceContract contract) {
 		this.serviceContracts.add(contract);
+	}
+
+	public void bill() {
+		
+	}
+
+	public List<Object> findBills() {
+		ArrayList<Object> bills = new ArrayList<>();
+		bills.add(new Account());
+		return bills;
+	}
+
+	public void addContact(Contact newContact) {
+		this.contacts.add(newContact);
+		if (this.primaryContact == null) {
+			this.primaryContact = newContact;
+		}
 	}
 	
 }
